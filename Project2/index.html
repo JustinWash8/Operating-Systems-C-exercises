@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- 
+    Name:       Justin Washington
+    Assignment: Project 2
+                CPU Scheduling Simulator
+    Simulators: Weighted Fair Queueing (WFQ) & 
+                Virtual Round Robin (VRR)
+    Date:       July 21, 2026
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fair Share CPU Scheduler Simulator</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <header>
+        <h1>Fair Share CPU Scheduling Simulator</h1>
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-tab="wfq-section">Weighted Fair Queueing (WFQ)</button>
+            <button class="tab-btn" data-tab="vrr-section">Virtual Round Robin (VRR)</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- WFQ Simulator Section -->
+        <section id="wfq-section" class="simulator-section active">
+            <h2>Weighted Fair Queueing (WFQ) Simulator</h2>
+            <div class="controls-card">
+                <div class="input-group">
+                    <label for="wfq-processes">Processes (max 10):</label>
+                    <input type="number" id="wfq-processes" min="1" max="10" value="5">
+                </div>
+                <div class="input-group">
+                    <label for="wfq-total-usage">Total Usage Seconds:</label>
+                    <input type="number" id="wfq-total-usage" min="1" value="60">
+                </div>
+                <button id="wfq-run-btn" class="primary-btn">Run WFQ Simulation</button>
+            </div>
+
+            <div class="table-container">
+                <table id="wfq-table">
+                    <thead>
+                        <tr>
+                            <th>Process Group</th>
+                            <th>Historical Usage (seconds)</th>
+                            <th>Entitlement (seconds)</th>
+                            <th>Fair-Share Weight</th>
+                            <th>Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamically populated -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- VRR Simulator Section -->
+        <section id="vrr-section" class="simulator-section">
+            <h2>Virtual Round Robin (VRR) Simulator</h2>
+            <div class="controls-card">
+                <div class="input-group">
+                    <label for="vrr-quantum">Base Time Quantum (ms, max 10):</label>
+                    <input type="number" id="vrr-quantum" min="1" max="10" value="4">
+                </div>
+                <div class="input-group">
+                    <label for="vrr-max-burst">Max Burst (ms, up to 80):</label>
+                    <input type="number" id="vrr-max-burst" min="10" max="80" value="35">
+                </div>
+                <div class="input-group">
+                    <label for="vrr-processes">Number of Processes (max 20):</label>
+                    <input type="number" id="vrr-processes" min="1" max="20" value="3">
+                </div>
+                <button id="vrr-run-btn" class="primary-btn">Run VRR Simulation</button>
+            </div>
+
+            <div class="table-container">
+                <table id="vrr-table">
+                    <thead>
+                        <tr id="vrr-table-header">
+                            <!-- Dynamically populated headers to support N processes -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamically populated -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <div class="signature">Justin Washington &bull; Operating Systems &bull; CPU Scheduling</div>
+    </main>
+
+    <!-- Performance Metrics Modal Popup -->
+    <div id="metrics-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modal-title">Simulation Performance Metrics</h3>
+            <div class="metrics-grid" id="metrics-grid-container">
+                <!-- Dynamically populated metrics grid cards -->
+            </div>
+            <button id="modal-close-btn" class="primary-btn">Close & View Results</button>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>

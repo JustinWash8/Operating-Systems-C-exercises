@@ -1,0 +1,277 @@
+/*
+ *
+ *  Name:       Justin Washington
+ *  Assignment: Project 2
+ *              CPU Scheduling Simulator
+ *  Simulators: Weighted Fair Queueing (WFQ) & 
+ *              Virtual Round Robin (VRR)
+ *  Date:       July 21, 2026
+ *
+ */
+
+:root {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-color: #1e293b;
+    --border-color: #cbd5e1;
+    --table-header-bg: #f1f5f9;
+    --badge-high-bg: #dcfce7;
+    --badge-high-text: #166534;
+    --badge-normal-bg: #e0f2fe;
+    --badge-normal-text: #0369a1;
+    --badge-low-bg: #fee2e2;
+    --badge-low-text: #991b1b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.5;
+    padding: 2rem;
+}
+
+header {
+    max-width: 1200px;
+    margin: 0 auto 2rem auto;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+    color: #0f172a;
+}
+
+.nav-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.simulator-section {
+    display: none;
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.simulator-section.active {
+    display: block;
+}
+
+.simulator-section h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.controls-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+    background-color: var(--table-header-bg);
+    border-radius: 0.5rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-group label {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.input-group input {
+    padding: 0.55rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    width: 180px;
+}
+
+.primary-btn {
+    padding: 0.6rem 1.25rem;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.primary-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+}
+
+table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+th, td {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+}
+
+th {
+    background-color: var(--table-header-bg);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+/* Make key VRR columns sticky horizontally so they remain visible when scrolling wide process grids */
+#vrr-table th:nth-child(1), #vrr-table td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    background-color: var(--card-bg);
+    border-right: 2px solid var(--border-color);
+}
+#vrr-table th:nth-child(1) {
+    z-index: 4;
+    background-color: var(--table-header-bg);
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.badge-high {
+    background-color: var(--badge-high-bg);
+    color: var(--badge-high-text);
+}
+
+.badge-normal {
+    background-color: var(--badge-normal-bg);
+    color: var(--badge-normal-text);
+}
+
+.badge-low {
+    background-color: var(--badge-low-bg);
+    color: var(--badge-low-text);
+}
+
+.signature {
+    font-weight: 100;
+    color: Navy;
+    margin-top: 1rem;
+    text-align: left;
+}
+
+/* Modal Popup Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: #0f172a;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.metric-card {
+    background-color: var(--table-header-bg);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.metric-title {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.metric-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
